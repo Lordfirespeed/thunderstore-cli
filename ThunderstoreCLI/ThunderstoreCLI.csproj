@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
-        <LangVersion>12</LangVersion>
+        <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+        <LangVersion>13</LangVersion>
         <RollForward>Major</RollForward>
         <RootNamespace>ThunderstoreCLI</RootNamespace>
         <AssemblyName>dev.lordfirespeed.tcli</AssemblyName>

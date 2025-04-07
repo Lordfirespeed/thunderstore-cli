@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
         <RollForward>Major</RollForward>
-        <LangVersion>11</LangVersion>
+        <LangVersion>13</LangVersion>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
