@@ -6,11 +6,10 @@
         <LangVersion>12</LangVersion>
         <RollForward>Major</RollForward>
         <RootNamespace>ThunderstoreCLI</RootNamespace>
-        <AssemblyName>tcli</AssemblyName>
+        <AssemblyName>dev.lordfirespeed.tcli</AssemblyName>
         <StartupObject>ThunderstoreCLI.Program</StartupObject>
-        <Company>Thunderstore</Company>
         <Product>Thunderstore CLI</Product>
-        <PackageProjectUrl>https://thunderstore.io/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Lordfirespeed/thunderstore-cli</RepositoryUrl>
         <Description>Thunderstore CLI is a command-line utility for building and uploading packages to Thunderstore</Description>
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>partial</TrimMode>
