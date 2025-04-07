@@ -3,7 +3,7 @@ using System.Text;
 using ThunderstoreCLI.Configuration;
 using ThunderstoreCLI.Models;
 using ThunderstoreCLI.Utils;
-using static Crayon.Output;
+using static Kokuban.Chalk;
 
 namespace ThunderstoreCLI.Commands;
 
@@ -51,15 +51,15 @@ public static class BuildCommand
                     Write.Error(
                         "Case mismatch!",
                         $"A file target was added twice to the build with different casing, which is not allowed!",
-                        $"Previously: {White(Dim($"/{duplicatePath}"))}",
-                        $"Now: {White(Dim($"/{path}"))}"
+                        $"Previously: {White.Dim.Render($"/{duplicatePath}")}",
+                        $"Now: {White.Dim.Render($"/{path}")}"
                     );
                     HasErrors = true;
                     return;
                 }
                 Write.Warn(
-                    $"{Dim(path)} was added multiple times to the build and will be overwritten",
-                    $"Re-Planned for {White(Dim($"/{path}"))}"
+                    $"{Dim.Render(path)} was added multiple times to the build and will be overwritten",
+                    $"Re-Planned for {White.Dim.Render($"/{path}")}"
                 );
                 plan[path] = dataGetter;
                 HasWarnings = true;
@@ -69,7 +69,7 @@ public static class BuildCommand
                 Write.Error(
                     "Filepath conflict!",
                     "A directory already exists in the location where a file was to be placed",
-                    $"Path in question: {White(Dim($"/{path}"))}"
+                    $"Path in question: {White.Dim.Render($"/{path}")}"
                 );
                 HasErrors = true;
                 return;
@@ -79,7 +79,7 @@ public static class BuildCommand
                 Write.Error(
                     "Directory path conflict!",
                     "A file already exists in the location where a directory was to be created",
-                    $"Path in question: {White(Dim($"/{path}"))}"
+                    $"Path in question: {White.Dim.Render($"/{path}")}"
                 );
                 HasErrors = true;
                 return;
@@ -121,19 +121,19 @@ public static class BuildCommand
     public static int DoBuild(Config config)
     {
         var packageId = config.GetPackageId();
-        Write.WithNL($"Building {Cyan(packageId)}", after: true);
+        Write.WithNL($"Building {Cyan.Render(packageId)}", after: true);
 
         var readmePath = config.GetPackageReadmePath();
         if (!File.Exists(readmePath))
         {
-            Write.ErrorExit($"Readme not found from the declared path: {White(Dim(readmePath))}");
+            Write.ErrorExit($"Readme not found from the declared path: {White.Dim.Render(readmePath)}");
             return 1;
         }
 
         var iconPath = config.GetPackageIconPath();
         if (!File.Exists(iconPath))
         {
-            Write.ErrorExit($"Icon not found from the declared path: {White(Dim(iconPath))}");
+            Write.ErrorExit($"Icon not found from the declared path: {White.Dim.Render(iconPath)}");
             return 1;
         }
 
@@ -144,7 +144,7 @@ public static class BuildCommand
         }
         var filename = config.GetBuildOutputFile();
 
-        Write.Line($"Output path {Cyan(filename)}");
+        Write.Line($"Output path {Cyan.Render(filename)}");
 
         var encounteredIssues = false;
 
@@ -160,7 +160,7 @@ public static class BuildCommand
         {
             foreach (var pathMap in config.BuildConfig.CopyPaths)
             {
-                Write.WithNL($"Mapping {Dim(pathMap.From)} to {Dim($"/{pathMap.To}")}", before: true);
+                Write.WithNL($"Mapping {Dim.Render(pathMap.From)} to {Dim.Render($"/{pathMap.To}")}", before: true);
                 encounteredIssues |= !AddPathToArchivePlan(plan, pathMap.From, pathMap.To);
             }
         }
@@ -209,7 +209,7 @@ public static class BuildCommand
         }
         else
         {
-            Write.Success($"Successfully built {Cyan(packageId)}");
+            Write.Success($"Successfully built {Cyan.Render(packageId)}");
             return 0;
         }
     }

@@ -1,5 +1,5 @@
 using ThunderstoreCLI.Models;
-using static Crayon.Output;
+using static Kokuban.Chalk;
 
 namespace ThunderstoreCLI.Configuration;
 
@@ -15,7 +15,7 @@ internal class ProjectFileConfig : EmptyConfig
         {
             Utils.Write.Warn(
                 "Unable to find project configuration file",
-                $"Looked from {Dim(SourcePath)}"
+                $"Looked from {Dim.Render(SourcePath)}"
             );
             Project = new ThunderstoreProject(false);
             return;

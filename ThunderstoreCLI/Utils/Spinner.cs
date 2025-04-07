@@ -1,4 +1,4 @@
-using static Crayon.Output;
+using static Kokuban.Chalk;
 
 namespace ThunderstoreCLI.Utils;
 
@@ -52,7 +52,7 @@ public class ProgressSpinner
             {
                 var spinner = completed == _tasks.Length ? '✓' : _spinChars[_spinIndex++ % _spinChars.Length];
                 Console.SetCursorPosition(0, Console.CursorTop);
-                Console.Write(Green($"{completed}/{_tasks.Length} {_label} {spinner}"));
+                Console.Write(Green.Render($"{completed}/{_tasks.Length} {_label} {spinner}"));
             }
             else
             {

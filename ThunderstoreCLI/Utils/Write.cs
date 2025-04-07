@@ -1,14 +1,14 @@
-using static Crayon.Output;
+using static Kokuban.Chalk;
 
 namespace ThunderstoreCLI.Utils;
 
 public static class Write
 {
-    private static void _Error(string msg) => Console.WriteLine(Red(msg));
-    private static void _Light(string msg) => Console.WriteLine(Dim(msg));
+    private static void _Error(string msg) => Console.WriteLine(Red.Render(msg));
+    private static void _Light(string msg) => Console.WriteLine(Dim.Render(msg));
     private static void _Regular(string msg) => Console.WriteLine(msg);
-    private static void _Success(string msg) => Console.WriteLine(Green(msg));
-    private static void _Warn(string msg) => Console.WriteLine(Yellow(msg));
+    private static void _Success(string msg) => Console.WriteLine(Green.Render(msg));
+    private static void _Warn(string msg) => Console.WriteLine(Yellow.Render(msg));
     private static void _NoLine(string msg) => Console.Write(msg);
 
     private static void _WriteMultiline(Action<string> write, string msg, string[] submsgs)

@@ -4,7 +4,7 @@ using System.Text;
 using ThunderstoreCLI.Configuration;
 using ThunderstoreCLI.Models;
 using ThunderstoreCLI.Utils;
-using static Crayon.Output;
+using static Kokuban.Chalk;
 
 namespace ThunderstoreCLI.Commands;
 
@@ -51,13 +51,13 @@ public static class PublishCommand
 
     public static int PublishFile(Config config, string filepath)
     {
-        Write.WithNL($"Publishing {Cyan(filepath)}", before: true, after: true);
+        Write.WithNL($"Publishing {Cyan.Render(filepath)}", before: true, after: true);
 
         if (!File.Exists(filepath))
         {
             Write.ErrorExit(
                 "File selected for publish was not found",
-                $"Looked from: {White(Dim(filepath))}"
+                $"Looked from: {White.Dim.Render(filepath)}"
             );
             return 1;
         }
@@ -145,24 +145,24 @@ public static class PublishCommand
 
         if (uploadData is null)
         {
-            Write.ErrorExit("Undeserializable InitiateUploadRequest response:", Dim(responseContent));
+            Write.ErrorExit("Undeserializable InitiateUploadRequest response:", Dim.Render(responseContent));
             throw new PublishCommandException();
         }
 
         if (uploadData.Metadata?.Filename is null || uploadData.Metadata?.UUID is null)
         {
-            Write.ErrorExit("No valid Metadata found in InitiateUploadRequest response:", Dim(responseContent));
+            Write.ErrorExit("No valid Metadata found in InitiateUploadRequest response:", Dim.Render(responseContent));
             throw new PublishCommandException();
         }
 
         if (uploadData.UploadUrls is null)
         {
-            Write.ErrorExit("No valid UploadUrls found in InitiateUploadRequest response:", Dim(responseContent));
+            Write.ErrorExit("No valid UploadUrls found in InitiateUploadRequest response:", Dim.Render(responseContent));
             throw new PublishCommandException();
         }
 
         var details = $"({MiscUtils.GetSizeString(uploadData.Metadata.Size)}) in {uploadData.UploadUrls.Length} chunks...";
-        Write.WithNL($"Uploading {Cyan(uploadData.Metadata.Filename)} {details}", after: true);
+        Write.WithNL($"Uploading {Cyan.Render(uploadData.Metadata.Filename)} {details}", after: true);
 
         return uploadData;
     }
@@ -181,13 +181,13 @@ public static class PublishCommand
         {
             Write.ErrorExit(
                 "Field package_version.download_url missing from PublishPackageRequest response:",
-                Dim(responseContent)
+                Dim.Render(responseContent)
             );
             throw new PublishCommandException();
         }
 
-        Write.Success($"Successfully published {Cyan($"{config.PackageConfig.Namespace}-{config.PackageConfig.Name}")}");
-        Write.Line($"It's available at {Cyan(jsonData.PackageVersion.DownloadUrl)}");
+        Write.Success($"Successfully published {Cyan.Render($"{config.PackageConfig.Namespace}-{config.PackageConfig.Name}")}");
+        Write.Line($"It's available at {Cyan.Render(jsonData.PackageVersion.DownloadUrl)}");
     }
 
     private static async Task<CompletedUpload.CompletedPartData> UploadChunk(UploadInitiateData.UploadPartData part, string filepath)
@@ -282,7 +282,7 @@ public static class PublishCommand
         Write.ErrorExit(
             $"Unexpected response from the server while {step}:",
             $"Status code: {response.StatusCode:D} {response.StatusCode}",
-            Dim(responseReader.ReadToEnd())
+            Dim.Render(responseReader.ReadToEnd())
         );
         throw new PublishCommandException();
     }

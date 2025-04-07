@@ -2,7 +2,7 @@ using CommandLine;
 using ThunderstoreCLI.Commands;
 using ThunderstoreCLI.Configuration;
 using ThunderstoreCLI.Utils;
-using static Crayon.Output;
+using static Kokuban.Chalk;
 
 namespace ThunderstoreCLI;
 
@@ -68,7 +68,7 @@ public abstract class PackageOptions : BaseOptions
         if (!isInitCommand && !File.Exists(fullPath))
         {
             Write.ErrorExit(
-                $"Configuration file not found, looked from: {White(Dim(fullPath))}",
+                $"Configuration file not found, looked from: {White.Dim.Render(fullPath)}",
                 "A project configuration file is required for this command.",
                 "You can initialize one with the 'init' command or define its location with --config-path argument."
             );
@@ -124,7 +124,7 @@ public class PublishOptions : PackageOptions
             if (!System.IO.File.Exists(filePath))
             {
                 Write.ErrorExit(
-                    $"Package file not found, looked from: {White(Dim(filePath))}",
+                    $"Package file not found, looked from: {White.Dim.Render(filePath)}",
                     "Package defined with --file argument must exist."
                 );
                 return false;

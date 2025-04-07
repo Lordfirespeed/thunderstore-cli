@@ -27,7 +27,7 @@
 
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
-        <PackageReference Include="Crayon" Version="2.0.69" />
+        <PackageReference Include="Kokuban" Version="0.2.0" />
         <PackageReference Include="MinVer" Version="4.3.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
