@@ -65,14 +65,8 @@ All in all, the structure is very similar to that of TMM/r2mm, but on the comman
 
 ### pre-commit
 
-This project uses [Pre-commit](https://pre-commit.com/) to enforce code style
-practices. In addition to having .NET and pre-commit installed locally, you'll
-need [dotnet-format](https://github.com/dotnet/format), which can be installed
-with:
-
-```
-dotnet tool install -g dotnet-format
-```
+This project uses [Pre-commit](https://pre-commit.com/) to enforce code style practices.
+You'll also need a recent version of the .NET SDK (8.0 or above).
 
 ### Versioning
 
