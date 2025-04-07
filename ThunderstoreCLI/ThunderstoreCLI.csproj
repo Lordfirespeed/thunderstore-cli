@@ -73,7 +73,7 @@
             <TargetSubdirectory Condition=" '$(Configuration)' == 'Release' ">release</TargetSubdirectory>
         </PropertyGroup>
         <Message Text="Building tcli-bepinex-installer..." IsCritical="true" />
-        <Exec Command="cargo build --manifest-path ../tcli-bepinex-installer/Cargo.toml $(CargoFlags)" ConsoleToMSBuild="true" />
+        <Exec Command="cargo build --manifest-path ../tcli-bepinex-installer/Cargo.toml $(CargoFlags)" ConsoleToMsBuild="true" />
         <ItemGroup>
             <None Include="..\tcli-bepinex-installer\target\$(TargetSubdirectory)\tcli-bepinex-installer.exe" Condition="$([MSBuild]::IsOSPlatform('Windows'))" ContinueOnError="true" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always">
                 <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
