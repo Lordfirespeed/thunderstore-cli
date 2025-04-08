@@ -145,32 +145,34 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
     {
         Package = new PackageData
         {
-            Namespace = config.PackageConfig.Namespace!,
-            Name = config.PackageConfig.Name!,
-            VersionNumber = config.PackageConfig.VersionNumber!,
-            Description = config.PackageConfig.Description!,
-            ProjectUrl = config.PackageConfig.WebsiteUrl!,
+            Namespace = config.PackageConfig.Namespace,
+            Name = config.PackageConfig.Name,
+            VersionNumber = config.PackageConfig.VersionNumber,
+            Description = config.PackageConfig.Description,
+            ProjectUrl = config.PackageConfig.ProjectUrl,
+            RepositoryUrl = config.PackageConfig.RepositoryUrl,
             ContainsNsfwContent = config.PackageConfig.ContainsNsfwContent.GetValueOrDefault(false),
-            Dependencies = config.PackageConfig.Dependencies!,
+            Dependencies = config.PackageConfig.Dependencies ?? [],
+            DependencyGroups = config.PackageConfig.DependencyGroups ?? [],
         };
         Build = new BuildData
         {
-            Icon = config.BuildConfig.IconPath!,
-            OutDir = config.BuildConfig.OutDir!,
-            Readme = config.BuildConfig.ReadmePath!,
-            CopyPaths = config.BuildConfig.CopyPaths!
+            Icon = config.BuildConfig.IconPath,
+            OutDir = config.BuildConfig.OutDir,
+            Readme = config.BuildConfig.ReadmePath,
+            CopyPaths = (config.BuildConfig.CopyPaths ?? [])
                 .Select(x => new BuildData.CopyPath { Source = x.From, Target = x.To })
                 .ToArray(),
         };
         Publish = new PublishData
         {
-            Categories = new CategoryDictionary { Categories = config.PublishConfig.Categories! },
-            Communities = config.PublishConfig.Communities!,
+            Categories = new CategoryDictionary { Categories = config.PublishConfig.Categories ?? [] },
+            Communities = config.PublishConfig.Communities ?? [],
             Repository = config.GeneralConfig.Repository,
         };
         Install = new InstallData
         {
-            InstallerDeclarations = config.InstallConfig.InstallerDeclarations!
+            InstallerDeclarations = (config.InstallConfig.InstallerDeclarations ?? [])
                 .Select(x => new InstallData.InstallerDeclaration { Identifier = x.Identifier })
                 .ToArray(),
         };

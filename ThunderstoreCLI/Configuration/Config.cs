@@ -190,9 +190,11 @@ public class PackageConfig
     public string? Name { get; set; }
     public string? VersionNumber { get; set; }
     public string? Description { get; set; }
-    public string? WebsiteUrl { get; set; }
+    public string? ProjectUrl { get; set; }
+    public string? RepositoryUrl { get; set; }
     public bool? ContainsNsfwContent { get; set; }
     public Dictionary<string, string>? Dependencies { get; set; }
+    public Dictionary<string, Dictionary<string, string>>? DependencyGroups { get; set; }
 }
 
 public class InitConfig

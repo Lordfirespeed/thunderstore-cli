@@ -19,7 +19,7 @@ class DefaultConfig : EmptyConfig
             Name = "PackageName",
             VersionNumber = "0.0.1",
             Description = "Example mod description",
-            WebsiteUrl = "https://thunderstore.io",
+            ProjectUrl = "https://thunderstore.io",
             ContainsNsfwContent = false,
             Dependencies = new()
             {

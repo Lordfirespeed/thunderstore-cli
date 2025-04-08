@@ -302,7 +302,7 @@ public static class BuildCommand
             Name = config.PackageConfig.Name,
             Description = config.PackageConfig.Description,
             VersionNumber = config.PackageConfig.VersionNumber,
-            WebsiteUrl = config.PackageConfig.WebsiteUrl,
+            WebsiteUrl = config.PackageConfig.ProjectUrl,
             Dependencies = dependencies.Select(x => $"{x.Key}-{x.Value}").ToArray(),
             Installers = installerDeclarations
                 .Select(x => new PackageManifestV1.InstallerDeclaration { Identifier = x.Identifier })

@@ -81,7 +81,7 @@ public static class InitCommand
         v.AddIfEmpty(config.PackageConfig.Name, "Package Name");
         v.AddIfNotSemver(config.PackageConfig.VersionNumber, "Package VersionNumber");
         v.AddIfNull(config.PackageConfig.Description, "Package Description");
-        v.AddIfNull(config.PackageConfig.WebsiteUrl, "Package WebsiteUrl");
+        v.AddIfNull(config.PackageConfig.ProjectUrl, "Package WebsiteUrl");
         v.AddIfNull(config.PackageConfig.ContainsNsfwContent, "Package ContainsNsfwContent");
         v.AddIfNull(config.PackageConfig.Dependencies, "Package Dependencies");
         v.AddIfEmpty(config.BuildConfig.IconPath, "Build IconPath");

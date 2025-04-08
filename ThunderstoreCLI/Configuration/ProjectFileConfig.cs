@@ -42,7 +42,7 @@ internal class ProjectFileConfig : EmptyConfig
             Description = Project.Package?.Description,
             Dependencies = Project.Package?.Dependencies,
             ContainsNsfwContent = Project.Package?.ContainsNsfwContent,
-            WebsiteUrl = Project.Package?.ProjectUrl
+            ProjectUrl = Project.Package?.ProjectUrl
         };
     }
 
