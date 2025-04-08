@@ -32,35 +32,36 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
     }
 
     [TomlDoNotInlineObject]
-    public class ConfigData
-    {
-        [TomlProperty("schemaVersion")]
-        public string SchemaVersion { get; set; } = "0.0.1";
-    }
-
-    [TomlProperty("config")]
-    public ConfigData? Config { get; set; } = new();
-
-    [TomlDoNotInlineObject]
     public class PackageData
     {
         [TomlProperty("namespace")]
         public string? Namespace { get; set; }
+
         [TomlProperty("name")]
         public string? Name { get; set; }
-        [TomlProperty("versionNumber")]
+
+        [TomlProperty("version")]
         public string? VersionNumber { get; set; }
+
         [TomlProperty("description")]
         public string? Description { get; set; }
-        [TomlProperty("websiteUrl")]
-        public string? WebsiteUrl { get; set; }
-        [TomlProperty("containsNsfwContent")]
+
+        [TomlProperty("repository-url")]
+        public string? RepositoryUrl { get; set; }
+
+        [TomlProperty("project-url")]
+        public string? ProjectUrl { get; set; }
+
+        [TomlProperty("contains-nsfw-content")]
         public bool ContainsNsfwContent { get; set; } = false;
 
-        [TomlProperty("dependencies")]
-        [TomlDoNotInlineObject]
-        public Dictionary<string, string> Dependencies { get; set; } = new();
+        [TomlProperty("dependencies"), TomlDoNotInlineObject]
+        public Dictionary<string, string> Dependencies { get; set; } = [];
+
+        [TomlProperty("dependency-groups"), TomlDoNotInlineObject]
+        public Dictionary<string, Dictionary<string, string>> DependencyGroups { get; set; } = [];
     }
+
     [TomlProperty("package")]
     public PackageData? Package { get; set; }
 
@@ -69,9 +70,11 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
     {
         [TomlProperty("icon")]
         public string? Icon { get; set; }
+
         [TomlProperty("readme")]
         public string? Readme { get; set; }
-        [TomlProperty("outdir")]
+
+        [TomlProperty("out-directory")]
         public string? OutDir { get; set; }
 
         [TomlDoNotInlineObject]
@@ -79,12 +82,13 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         {
             [TomlProperty("source")]
             public string? Source { get; set; }
+
             [TomlProperty("target")]
             public string? Target { get; set; }
         }
 
         [TomlProperty("copy")]
-        public CopyPath[] CopyPaths { get; set; } = Array.Empty<CopyPath>();
+        public CopyPath[] CopyPaths { get; set; } = [];
     }
     [TomlProperty("build")]
     public BuildData? Build { get; set; }
@@ -96,7 +100,7 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         public string? Repository { get; set; }
 
         [TomlProperty("communities")]
-        public string[] Communities { get; set; } = Array.Empty<string>();
+        public string[] Communities { get; set; } = [];
 
         [TomlProperty("categories")]
         [TomlDoNotInlineObject]
@@ -119,7 +123,7 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         }
 
         [TomlProperty("installers")]
-        public InstallerDeclaration[] InstallerDeclarations { get; set; } = Array.Empty<InstallerDeclaration>();
+        public InstallerDeclaration[] InstallerDeclarations { get; set; } = [];
     }
     [TomlProperty("install")]
     public InstallData? Install { get; set; }
@@ -145,9 +149,9 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
             Name = config.PackageConfig.Name!,
             VersionNumber = config.PackageConfig.VersionNumber!,
             Description = config.PackageConfig.Description!,
-            WebsiteUrl = config.PackageConfig.WebsiteUrl!,
+            ProjectUrl = config.PackageConfig.WebsiteUrl!,
             ContainsNsfwContent = config.PackageConfig.ContainsNsfwContent.GetValueOrDefault(false),
-            Dependencies = config.PackageConfig.Dependencies!
+            Dependencies = config.PackageConfig.Dependencies!,
         };
         Build = new BuildData
         {
@@ -156,19 +160,19 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
             Readme = config.BuildConfig.ReadmePath!,
             CopyPaths = config.BuildConfig.CopyPaths!
                 .Select(x => new BuildData.CopyPath { Source = x.From, Target = x.To })
-                .ToArray()
+                .ToArray(),
         };
         Publish = new PublishData
         {
             Categories = new CategoryDictionary { Categories = config.PublishConfig.Categories! },
             Communities = config.PublishConfig.Communities!,
-            Repository = config.GeneralConfig.Repository
+            Repository = config.GeneralConfig.Repository,
         };
         Install = new InstallData
         {
             InstallerDeclarations = config.InstallConfig.InstallerDeclarations!
                 .Select(x => new InstallData.InstallerDeclaration { Identifier = x.Identifier })
-                .ToArray()
+                .ToArray(),
         };
     }
 }
