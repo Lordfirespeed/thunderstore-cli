@@ -44,7 +44,7 @@ public class PackageManifestV1 : BaseJson<PackageManifestV1>
         Name = version.Name;
         Description = version.Description;
         VersionNumber = version.VersionNumber;
-        Dependencies = version.Dependencies?.ToArray() ?? Array.Empty<string>();
+        Dependencies = version.Dependencies?.ToArray() ?? [];
         WebsiteUrl = version.WebsiteUrl;
     }
 
@@ -54,7 +54,7 @@ public class PackageManifestV1 : BaseJson<PackageManifestV1>
         Name = listing.Name;
         Description = version.Description;
         VersionNumber = version.VersionNumber;
-        Dependencies = version.Dependencies?.ToArray() ?? Array.Empty<string>();
+        Dependencies = version.Dependencies?.ToArray() ?? [];
         WebsiteUrl = version.WebsiteUrl;
     }
 }
