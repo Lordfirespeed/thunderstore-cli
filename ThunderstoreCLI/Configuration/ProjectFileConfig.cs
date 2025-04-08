@@ -33,16 +33,44 @@ internal class ProjectFileConfig : EmptyConfig
 
     public override PackageConfig GetPackageMeta()
     {
+        var project = Project.Project;
+        if (project is null)
+            return new PackageConfig
+            {
+                ProjectConfigPath = SourcePath,
+            };
+
         return new PackageConfig
         {
-            Namespace = Project.Package?.Namespace,
-            Name = Project.Package?.Name,
-            VersionNumber = Project.Package?.VersionNumber,
             ProjectConfigPath = SourcePath,
-            Description = Project.Package?.Description,
-            Dependencies = Project.Package?.Dependencies,
-            ContainsNsfwContent = Project.Package?.ContainsNsfwContent,
-            ProjectUrl = Project.Package?.ProjectUrl
+            Namespace = project.Namespace,
+            Name = project.Name,
+            VersionNumber = project.VersionNumber,
+            Description = project.Description,
+            Dependencies = project.Dependencies,
+            DependencyGroups = project.DependencyGroups,
+            ContainsNsfwContent = project.ContainsNsfwContent,
+            ProjectUrl = project.ProjectUrl,
+            RepositoryUrl = project.RepositoryUrl,
+            Communities = project.Communities
+                .Select(community => new CommunityConfig
+                {
+                    Name = community.Name,
+                    Project = new CommunitySpecificProjectConfig
+                    {
+                        Namespace = community.Project?.Namespace,
+                        Name = community.Project?.Name,
+                        VersionNumber = community.Project?.VersionNumber,
+                        Description = community.Project?.Description,
+                        Dependencies = community.Project?.Dependencies,
+                        DependencyGroups = community.Project?.DependencyGroups,
+                        ContainsNsfwContent = community.Project?.ContainsNsfwContent,
+                        ProjectUrl = community.Project?.ProjectUrl,
+                        RepositoryUrl = community.Project?.RepositoryUrl,
+                        Categories = community.Project?.Categories?.ToList(),
+                    }
+                })
+                .ToList(),
         };
     }
 
@@ -54,18 +82,14 @@ internal class ProjectFileConfig : EmptyConfig
                 .Select(static path => new CopyPathMap(path.Source, path.Target))
                 .ToList(),
             IconPath = Project.Build?.Icon,
-            OutDir = Project.Build?.OutDir,
+            OutDir = Project.Build?.OutDirectory,
             ReadmePath = Project.Build?.Readme
         };
     }
 
     public override PublishConfig GetPublishConfig()
     {
-        return new PublishConfig
-        {
-            Categories = Project.Publish?.Categories.Categories,
-            Communities = Project.Publish?.Communities
-        };
+        return new PublishConfig();
     }
 
     public override InstallConfig GetInstallConfig()

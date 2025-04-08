@@ -8,31 +8,7 @@ namespace ThunderstoreCLI.Models;
 [TomlDoNotInlineObject]
 public class ThunderstoreProject : BaseToml<ThunderstoreProject>
 {
-    public struct CategoryDictionary
-    {
-        public Dictionary<string, string[]> Categories;
-    }
-
-    static ThunderstoreProject()
-    {
-        TomletMain.RegisterMapper(
-            dict => TomletMain.ValueFrom(dict.Categories),
-            toml => toml switch
-            {
-                TomlArray arr => new CategoryDictionary
-                {
-                    Categories = new Dictionary<string, string[]>
-                    {
-                        { "", arr.ArrayValues.Select(v => v.StringValue).ToArray() }
-                    }
-                },
-                TomlTable table => new CategoryDictionary { Categories = TomletMain.To<Dictionary<string, string[]>>(table) },
-                _ => throw new NotSupportedException()
-            });
-    }
-
-    [TomlDoNotInlineObject]
-    public class PackageData
+    public abstract class ProjectDataBase
     {
         [TomlProperty("namespace")]
         public string? Namespace { get; set; }
@@ -49,21 +25,48 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         [TomlProperty("repository-url")]
         public string? RepositoryUrl { get; set; }
 
-        [TomlProperty("project-url")]
+        [TomlProperty("url")]
         public string? ProjectUrl { get; set; }
 
         [TomlProperty("contains-nsfw-content")]
-        public bool ContainsNsfwContent { get; set; } = false;
+        public bool? ContainsNsfwContent { get; set; }
 
         [TomlProperty("dependencies"), TomlDoNotInlineObject]
-        public Dictionary<string, string> Dependencies { get; set; } = [];
+        public Dictionary<string, string>? Dependencies { get; set; } = [];
 
-        [TomlProperty("dependency-groups"), TomlDoNotInlineObject]
-        public Dictionary<string, Dictionary<string, string>> DependencyGroups { get; set; } = [];
+        [TomlProperty("dependency-group"), TomlDoNotInlineObject]
+        public Dictionary<string, Dictionary<string, string>>? DependencyGroups { get; set; } = [];
     }
 
-    [TomlProperty("package")]
-    public PackageData? Package { get; set; }
+    /// <summary>
+    /// Top-level package data, common to all communities.
+    /// </summary>
+    [TomlDoNotInlineObject]
+    public class ProjectData : ProjectDataBase
+    {
+        [TomlProperty("community")]
+        public CommunityData[] Communities { get; set; } = [];
+    }
+
+    [TomlDoNotInlineObject]
+    public class CommunitySpecificProjectData : ProjectDataBase
+    {
+        [TomlProperty("categories")]
+        public string[]? Categories { get; set; } = [];
+    }
+
+    [TomlDoNotInlineObject]
+    public class CommunityData
+    {
+        [TomlProperty("name")]
+        public string? Name { get; set; }
+
+        [TomlProperty("project")]
+        public CommunitySpecificProjectData? Project { get; set; }
+    }
+
+    [TomlProperty("project")]
+    public ProjectData? Project { get; set; }
 
     [TomlDoNotInlineObject]
     public class BuildData
@@ -75,7 +78,7 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         public string? Readme { get; set; }
 
         [TomlProperty("out-directory")]
-        public string? OutDir { get; set; }
+        public string? OutDirectory { get; set; }
 
         [TomlDoNotInlineObject]
         public class CopyPath
@@ -98,16 +101,6 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
     {
         [TomlProperty("repository")]
         public string? Repository { get; set; }
-
-        [TomlProperty("communities")]
-        public string[] Communities { get; set; } = [];
-
-        [TomlProperty("categories")]
-        [TomlDoNotInlineObject]
-        public CategoryDictionary Categories { get; set; } = new()
-        {
-            Categories = new Dictionary<string, string[]>(),
-        };
     }
     [TomlProperty("publish")]
     public PublishData? Publish { get; set; }
@@ -135,7 +128,7 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         if (!initialize)
             return;
 
-        Package = new PackageData();
+        Project = new ProjectData();
         Build = new BuildData();
         Publish = new PublishData();
         Install = new InstallData();
@@ -143,7 +136,7 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
 
     public ThunderstoreProject(Config config)
     {
-        Package = new PackageData
+        Project = new ProjectData
         {
             Namespace = config.PackageConfig.Namespace,
             Name = config.PackageConfig.Name,
@@ -151,14 +144,33 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
             Description = config.PackageConfig.Description,
             ProjectUrl = config.PackageConfig.ProjectUrl,
             RepositoryUrl = config.PackageConfig.RepositoryUrl,
-            ContainsNsfwContent = config.PackageConfig.ContainsNsfwContent.GetValueOrDefault(false),
-            Dependencies = config.PackageConfig.Dependencies ?? [],
-            DependencyGroups = config.PackageConfig.DependencyGroups ?? [],
+            ContainsNsfwContent = config.PackageConfig.ContainsNsfwContent,
+            Dependencies = config.PackageConfig.Dependencies,
+            DependencyGroups = config.PackageConfig.DependencyGroups,
+            Communities = (config.PackageConfig.Communities ?? [])
+                .Select(community => new CommunityData
+                {
+                    Name = community.Name,
+                    Project = new CommunitySpecificProjectData
+                    {
+                        Namespace = community.Project?.Namespace,
+                        Name = community.Project?.Name,
+                        VersionNumber = community.Project?.VersionNumber,
+                        Description = community.Project?.Description,
+                        ProjectUrl = community.Project?.ProjectUrl,
+                        RepositoryUrl = community.Project?.RepositoryUrl,
+                        ContainsNsfwContent = community.Project?.ContainsNsfwContent,
+                        Dependencies = community.Project?.Dependencies,
+                        DependencyGroups = community.Project?.DependencyGroups,
+                        Categories = community.Project?.Categories?.ToArray(),
+                    }
+                })
+                .ToArray(),
         };
         Build = new BuildData
         {
             Icon = config.BuildConfig.IconPath,
-            OutDir = config.BuildConfig.OutDir,
+            OutDirectory = config.BuildConfig.OutDir,
             Readme = config.BuildConfig.ReadmePath,
             CopyPaths = (config.BuildConfig.CopyPaths ?? [])
                 .Select(x => new BuildData.CopyPath { Source = x.From, Target = x.To })
@@ -166,8 +178,6 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
         };
         Publish = new PublishData
         {
-            Categories = new CategoryDictionary { Categories = config.PublishConfig.Categories ?? [] },
-            Communities = config.PublishConfig.Communities ?? [],
             Repository = config.GeneralConfig.Repository,
         };
         Install = new InstallData

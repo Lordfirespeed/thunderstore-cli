@@ -115,18 +115,22 @@ public class Config
         return Path.GetFullPath(Path.Join(GetBuildOutputDir(), $"{GetPackageId()}.zip"));
     }
 
-    public PackageUploadMetadata GetUploadMetadata(string fileUuid)
+    public PackageUploadMetadata GetUploadMetadata(string fileUuid, string communityName)
     {
+        if (PackageConfig.Communities is null)
+            throw new InvalidOperationException("No communities have been declared in project's community list");
+        var community = PackageConfig.Communities.Find(community => community.Name == communityName);
+        if (community is null)
+            throw new InvalidOperationException($"Community {communityName} is not declared in project's community list");
+
         return new PackageUploadMetadata
         {
-            AuthorName = PackageConfig.Namespace,
-            Categories = PublishConfig.Categories!.GetOrDefault("") ?? Array.Empty<string>(),
-            CommunityCategories = PublishConfig.Categories!
-                .Where(kvp => kvp.Key != "")
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-            Communities = PublishConfig.Communities,
-            HasNsfwContent = PackageConfig.ContainsNsfwContent ?? false,
-            UploadUUID = fileUuid
+            AuthorName = community.Project?.Namespace ?? PackageConfig.Namespace ?? throw new InvalidOperationException(),
+            Categories = community.Project?.Categories?.ToArray() ?? [],
+            Communities = [communityName],
+            CommunityCategories = [],
+            HasNsfwContent = community.Project?.ContainsNsfwContent ?? PackageConfig.ContainsNsfwContent ?? false,
+            UploadUUID = fileUuid,
         };
     }
 
@@ -183,9 +187,8 @@ public class GeneralConfig
     public string Repository { get; set; } = null!;
 }
 
-public class PackageConfig
+public abstract class PackageConfigBase
 {
-    public string? ProjectConfigPath { get; set; }
     public string? Namespace { get; set; }
     public string? Name { get; set; }
     public string? VersionNumber { get; set; }
@@ -195,6 +198,23 @@ public class PackageConfig
     public bool? ContainsNsfwContent { get; set; }
     public Dictionary<string, string>? Dependencies { get; set; }
     public Dictionary<string, Dictionary<string, string>>? DependencyGroups { get; set; }
+}
+
+public class CommunitySpecificProjectConfig : PackageConfigBase
+{
+    public List<string>? Categories { get; set; }
+}
+
+public class CommunityConfig
+{
+    public string? Name { get; set; }
+    public CommunitySpecificProjectConfig? Project { get; set; }
+}
+
+public class PackageConfig : PackageConfigBase
+{
+    public string? ProjectConfigPath { get; set; }
+    public List<CommunityConfig>? Communities { get; set; }
 }
 
 public class InitConfig
@@ -230,8 +250,6 @@ public class BuildConfig
 public class PublishConfig
 {
     public string? File { get; set; }
-    public string[]? Communities { get; set; }
-    public Dictionary<string, string[]>? Categories { get; set; }
 }
 
 public struct InstallerDeclaration

@@ -169,7 +169,10 @@ public static class PublishCommand
 
     private static void PublishPackageRequest(Config config, string uploadUuid)
     {
-        var response = HttpClient.Send(config.Api.SubmitPackage(uploadUuid));
+        var community = config.PackageConfig.Communities?.Single();  // todo: support upload to multiple communities
+        if (community?.Name is null)
+            throw new InvalidOperationException();
+        var response = HttpClient.Send(config.Api.SubmitPackage(uploadUuid, community.Name));
 
         HandleRequestError("publishing package", response);
 

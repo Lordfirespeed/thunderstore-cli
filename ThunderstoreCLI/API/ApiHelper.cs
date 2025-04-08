@@ -31,14 +31,16 @@ public class ApiHelper
     private const string EXPERIMENTAL = "api/experimental/";
     private const string COMMUNITY = "c/";
 
-    public HttpRequestMessage SubmitPackage(string fileUuid)
+    public HttpRequestMessage SubmitPackage(string fileUuid, string communityName)
     {
+        var metadata = Config.GetUploadMetadata(fileUuid, communityName);
+
         return BaseRequestBuilder
             .StartNew()
             .WithEndpoint(EXPERIMENTAL + "submission/submit/")
             .WithMethod(HttpMethod.Post)
             .WithAuth(AuthHeader)
-            .WithContent(new StringContent(Config.GetUploadMetadata(fileUuid).Serialize(), Encoding.UTF8, "application/json"))
+            .WithContent(new StringContent(metadata.Serialize(), Encoding.UTF8, "application/json"))
             .GetRequest();
     }
 

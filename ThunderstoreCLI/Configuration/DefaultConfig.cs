@@ -24,7 +24,17 @@ class DefaultConfig : EmptyConfig
             Dependencies = new()
             {
                 { "AuthorName-PackageName", "0.0.1" }
-            }
+            },
+            Communities = [
+                new CommunityConfig
+                {
+                    Name = "riskofrain2",
+                    Project = new CommunitySpecificProjectConfig
+                    {
+                        Categories = ["items", "skills",]
+                    }
+                },
+            ]
         };
     }
 
@@ -52,10 +62,6 @@ class DefaultConfig : EmptyConfig
         return new PublishConfig
         {
             File = null,
-            Communities = ["riskofrain2"],
-            Categories = new Dictionary<string, string[]> {
-                { "riskofrain2", ["items", "skills", ] },
-            }
         };
     }
 
