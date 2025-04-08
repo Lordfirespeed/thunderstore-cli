@@ -33,7 +33,7 @@
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
         <!-- needed to use some C#11 features with NET 6, like required properties. -->
-        <PackageReference Include="PolySharp" Version="1.12.1">
+        <PackageReference Include="PolySharp" Version="1.15.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
