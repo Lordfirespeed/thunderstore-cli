@@ -11,7 +11,7 @@ using StreamBigJson;
 namespace StreamBigJson.Migrations
 {
     [DbContext(typeof(PackageIndexContext))]
-    [Migration("20250415102956_Initial")]
+    [Migration("20250415141519_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

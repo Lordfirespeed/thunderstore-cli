@@ -24,27 +24,6 @@ namespace StreamBigJson.Migrations
                         .HasColumnType("TEXT")
                         .HasAnnotation("Relational:JsonPropertyName", "uuid4");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "date_created");
-
-                    b.Property<string>("DonationUrl")
-                        .HasMaxLength(512)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "donation_link");
-
-                    b.Property<bool>("HasNsfwContent")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "has_nsfw_content");
-
-                    b.Property<bool>("IsDeprecated")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "is_deprecated");
-
-                    b.Property<bool>("IsPinned")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "is_pinned");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -56,20 +35,6 @@ namespace StreamBigJson.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT")
                         .HasAnnotation("Relational:JsonPropertyName", "owner");
-
-                    b.Property<string>("PackageUrl")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "package_url");
-
-                    b.Property<long>("RatingScore")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "rating_score");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "date_updated");
 
                     b.HasKey("PackageUuid");
 
@@ -83,89 +48,12 @@ namespace StreamBigJson.Migrations
                     b.ToTable("Packages");
                 });
 
-            modelBuilder.Entity("StreamBigJson.PackageCategory", b =>
-                {
-                    b.Property<Guid>("PackageUuid")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CategoryLabel")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PackageUuid", "CategoryLabel");
-
-                    b.HasIndex("CategoryLabel");
-
-                    b.HasIndex("PackageUuid");
-
-                    b.ToTable("PackageCategories");
-                });
-
-            modelBuilder.Entity("StreamBigJson.PackageDependency", b =>
-                {
-                    b.Property<Guid>("PackageVersionUuid")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DependencyNamespace")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DependencyName")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("DependencyVersionString")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PackageVersionUuid", "DependencyNamespace", "DependencyName");
-
-                    b.HasIndex("PackageVersionUuid");
-
-                    b.ToTable("PackageDependencies");
-                });
-
             modelBuilder.Entity("StreamBigJson.PackageVersion", b =>
                 {
                     b.Property<Guid>("PackageVersionUuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasAnnotation("Relational:JsonPropertyName", "uuid4");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "date_created");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "description");
-
-                    b.Property<long>("DownloadCount")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "downloads");
-
-                    b.Property<string>("DownloadUrl")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "download_url");
-
-                    b.Property<long>("FileSize")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "file_size");
-
-                    b.Property<string>("IconUrl")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "icon");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Relational:JsonPropertyName", "is_active");
 
                     b.Property<Guid?>("PackageUuid")
                         .HasColumnType("TEXT");
@@ -176,11 +64,6 @@ namespace StreamBigJson.Migrations
                         .HasColumnType("TEXT")
                         .HasAnnotation("Relational:JsonPropertyName", "version_number");
 
-                    b.Property<string>("WebsiteUrl")
-                        .HasMaxLength(512)
-                        .HasColumnType("TEXT")
-                        .HasAnnotation("Relational:JsonPropertyName", "website_url");
-
                     b.HasKey("PackageVersionUuid");
 
                     b.HasIndex("PackageUuid");
@@ -188,24 +71,6 @@ namespace StreamBigJson.Migrations
                     b.ToTable("PackageVersions");
 
                     b.HasAnnotation("Relational:JsonPropertyName", "versions");
-                });
-
-            modelBuilder.Entity("StreamBigJson.PackageCategory", b =>
-                {
-                    b.HasOne("StreamBigJson.Package", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("PackageUuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("StreamBigJson.PackageDependency", b =>
-                {
-                    b.HasOne("StreamBigJson.PackageVersion", null)
-                        .WithMany("Dependencies")
-                        .HasForeignKey("PackageVersionUuid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("StreamBigJson.PackageVersion", b =>
@@ -219,14 +84,7 @@ namespace StreamBigJson.Migrations
 
             modelBuilder.Entity("StreamBigJson.Package", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Versions");
-                });
-
-            modelBuilder.Entity("StreamBigJson.PackageVersion", b =>
-                {
-                    b.Navigation("Dependencies");
                 });
 #pragma warning restore 612, 618
         }

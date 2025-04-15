@@ -25,62 +25,6 @@ public class Package
     [MaxLength(128)]
     public required string Namespace { get; init; }
 
-    [JsonPropertyName("package_url")]
-    [JsonRequired]
-    [MaxLength(512)]
-    public required Uri PackageUrl { get; init; }
-
-    [JsonPropertyName("donation_link")]
-    [MaxLength(512)]
-    public Uri? DonationUrl { get; init; }
-
-    [JsonPropertyName("date_created")]
-    [JsonRequired]
-    public required DateTime CreatedAt { get; init; }
-
-    [JsonPropertyName("date_updated")]
-    [JsonRequired]
-    public required DateTime UpdatedAt { get; init; }
-
-    [JsonPropertyName("rating_score")]
-    [JsonRequired]
-    public required long RatingScore { get; init; }
-
-    [JsonPropertyName("is_pinned")]
-    [JsonRequired]
-    public required bool IsPinned { get; init; }
-
-    [JsonPropertyName("is_deprecated")]
-    [JsonRequired]
-    public required bool IsDeprecated { get; init; }
-
-    [JsonPropertyName("has_nsfw_content")]
-    [JsonRequired]
-    public required bool HasNsfwContent { get; init; }
-
-    #region categories handling
-    [JsonPropertyName("categories")]
-    [JsonRequired]
-    [NotMapped]
-    public required List<string> CategoryLabels
-    {
-        get => Categories.Select(category => category.CategoryLabel).ToList();
-        init
-        {
-            Categories = value
-                .Select(label => new PackageCategory
-                {
-                    PackageUuid = PackageUuid,
-                    CategoryLabel = label,
-                })
-                .ToList();
-        }
-    }
-
-    [JsonIgnore]
-    public List<PackageCategory> Categories { get; init; } = null!;
-    #endregion
-
     [JsonPropertyName("versions")]
     [JsonRequired]
     public required List<PackageVersion> Versions { get; init; }
