@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using StreamBigJson;
 
-using (var context = new PackageIndexContext())
+using (var context = new PackageIndexContext { DbPath = "./lethal-company-index.db" })
 using (var fs = File.OpenRead("../lethal-company-index.json"))
 {
     await context.Database.EnsureDeletedAsync();
@@ -12,11 +12,13 @@ using (var fs = File.OpenRead("../lethal-company-index.json"))
     var counter = 0;
     await foreach (var package in enumerable)
     {
-        if (package is null) continue;
+        if (package is null)
+            continue;
         foreach (var version in package.Versions.ToArray())
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (version.VersionNumber is null) package.Versions.Remove(version);
+            if (version.VersionNumber is null)
+                package.Versions.Remove(version);
         }
         context.Add(package);
         counter = await BufferedSave(counter, context);
@@ -28,7 +30,8 @@ return;
 
 async Task<int> BufferedSave(int counter, DbContext context)
 {
-    if (++counter < 500) return counter;
+    if (++counter < 500)
+        return counter;
     await Save(context);
     return 0;
 }
