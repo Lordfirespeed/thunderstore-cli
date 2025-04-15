@@ -13,7 +13,7 @@
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />
-      <PackageReference Include="NuGet.Versioning" Version="6.13.2" />
+      <ProjectReference Include="$(ProjectDir)../ThunderstoreCLI/ThunderstoreCLI.csproj" />
     </ItemGroup>
 
 </Project>

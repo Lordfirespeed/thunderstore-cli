@@ -1,14 +1,18 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using StreamBigJson;
+using ThunderstoreCLI;
 
-using (var context = new PackageIndexContext { DbPath = "./lethal-company-index.db" })
-using (var fs = File.OpenRead("../lethal-company-index.json"))
+var community = "lethal-company";
 {
+    await using var context = new PackageIndexContext { DbPath = $"./{community}-index.db" };
+    using var http = new HttpClient();
     await context.Database.EnsureDeletedAsync();
     await context.Database.MigrateAsync();
 
-    var enumerable = JsonSerializer.DeserializeAsyncEnumerable<Package>(fs);
+    var stream = await http.GetStreamAsync(new Uri($"{Defaults.REPOSITORY_URL}/c/{community}/api/v1/package/"));
+
+    var enumerable = JsonSerializer.DeserializeAsyncEnumerable<Package>(stream);
     var counter = 0;
     await foreach (var package in enumerable)
     {
