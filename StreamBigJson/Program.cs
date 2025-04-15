@@ -3,14 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using StreamBigJson;
 using ThunderstoreCLI;
 
-var community = "repo";
+async Task Main()
 {
+    var community = "lethal-company";
     // ReSharper disable once UseAwaitUsing - `await using` doesn't close the database connection properly
     using var context = new PackageIndexContext { DbPath = $"./{community}-index.db" };
-    using var http = new HttpClient();
     await context.Database.EnsureDeletedAsync();
     await context.Database.MigrateAsync();
 
+    using var http = new HttpClient();
     var stream = await http.GetStreamAsync(new Uri($"{Defaults.REPOSITORY_URL}/c/{community}/api/v1/package/"));
 
     var enumerable = JsonSerializer.DeserializeAsyncEnumerable<Package>(stream);
@@ -30,3 +31,5 @@ var community = "repo";
     }
     await bufferer.Save();
 }
+
+await Task.Run(Main);
