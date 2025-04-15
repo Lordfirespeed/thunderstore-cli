@@ -13,7 +13,7 @@ var community = "lethal-company";
     var stream = await http.GetStreamAsync(new Uri($"{Defaults.REPOSITORY_URL}/c/{community}/api/v1/package/"));
 
     var enumerable = JsonSerializer.DeserializeAsyncEnumerable<Package>(stream);
-    var counter = 0;
+    var bufferer = new SaveBufferer(context, 500);
     await foreach (var package in enumerable)
     {
         if (package is null)
@@ -25,22 +25,28 @@ var community = "lethal-company";
                 package.Versions.Remove(version);
         }
         context.Add(package);
-        counter = await BufferedSave(counter, context);
+        await bufferer.BufferedSave();
     }
-    await Save(context);
+    await bufferer.Save();
 }
 
 return;
 
-async Task<int> BufferedSave(int counter, DbContext context)
+class SaveBufferer(DbContext context, int threshold)
 {
-    if (++counter < 500)
-        return counter;
-    await Save(context);
-    return 0;
-}
+    private int _counter = 0;
+    private int _threshold = threshold;
+    private DbContext _context = context;
 
-async Task Save(DbContext context)
-{
-    await context.SaveChangesAsync();
+    public async Task BufferedSave()
+    {
+        if (++_counter < _threshold)
+            return;
+        await Save();
+    }
+
+    public async Task Save()
+    {
+        await context.SaveChangesAsync();
+    }
 }
