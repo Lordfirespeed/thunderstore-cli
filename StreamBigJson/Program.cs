@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StreamBigJson;
 using ThunderstoreCLI;
 
-var community = "lethal-company";
+var community = "repo";
 {
     await using var context = new PackageIndexContext { DbPath = $"./{community}-index.db" };
     using var http = new HttpClient();
@@ -28,25 +28,4 @@ var community = "lethal-company";
         await bufferer.BufferedSave();
     }
     await bufferer.Save();
-}
-
-return;
-
-class SaveBufferer(DbContext context, int threshold)
-{
-    private int _counter = 0;
-    private int _threshold = threshold;
-    private DbContext _context = context;
-
-    public async Task BufferedSave()
-    {
-        if (++_counter < _threshold)
-            return;
-        await Save();
-    }
-
-    public async Task Save()
-    {
-        await context.SaveChangesAsync();
-    }
 }
