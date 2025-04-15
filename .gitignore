@@ -38,6 +38,11 @@
 !ThunderstoreCLI.sln
 
 ### C# Projects
+!StreamBigJson
+/StreamBigJson/[Bb]in
+/StreamBigJson/[Oo]bj
+/StreamBigJson/[Dd]ist
+
 !/ThunderstoreCLI
 /ThunderstoreCLI/[Bb]in
 /ThunderstoreCLI/[Oo]bj
