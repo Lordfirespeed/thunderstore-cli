@@ -18,11 +18,11 @@ public class PackageDependency
     {
         PackageVersionUuid = packageVersionUuid;
         var parts = moniker.Split("-");
-        if (parts.Length != 3)
-            throw new ArgumentException("moniker should contain 3 parts", nameof(moniker));
-        DependencyNamespace = parts[0];
-        DependencyName = parts[1];
-        DependencyVersionString = parts[2];
+        if (parts.Length < 3)
+            throw new ArgumentException($"moniker should contain at least 3 parts, got {moniker}", nameof(moniker));
+        DependencyNamespace = string.Join("-", parts[..^2]);
+        DependencyName = parts[^2];
+        DependencyVersionString = parts[^1];
     }
 
     [MaxLength(128)]
