@@ -5,7 +5,8 @@ using ThunderstoreCLI;
 
 var community = "repo";
 {
-    await using var context = new PackageIndexContext { DbPath = $"./{community}-index.db" };
+    // ReSharper disable once UseAwaitUsing - `await using` doesn't close the database connection properly
+    using var context = new PackageIndexContext { DbPath = $"./{community}-index.db" };
     using var http = new HttpClient();
     await context.Database.EnsureDeletedAsync();
     await context.Database.MigrateAsync();
