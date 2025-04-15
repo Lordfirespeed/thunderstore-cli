@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThunderstoreCLI", "Thunders
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThunderstoreCLI.Tests", "ThunderstoreCLI.Tests\ThunderstoreCLI.Tests.csproj", "{EFBF7611-F017-464F-9EF4-9695164FCEEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamBigJson", "StreamBigJson\StreamBigJson.csproj", "{47501CB2-091B-442D-B3D7-043F4CC59AAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EFBF7611-F017-464F-9EF4-9695164FCEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFBF7611-F017-464F-9EF4-9695164FCEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFBF7611-F017-464F-9EF4-9695164FCEEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47501CB2-091B-442D-B3D7-043F4CC59AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47501CB2-091B-442D-B3D7-043F4CC59AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47501CB2-091B-442D-B3D7-043F4CC59AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47501CB2-091B-442D-B3D7-043F4CC59AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
