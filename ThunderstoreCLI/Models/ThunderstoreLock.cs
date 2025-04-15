@@ -91,6 +91,9 @@ public class ThunderstoreLock : BaseToml<ThunderstoreLock>
 
         [TomlProperty("metadata")]
         public PackageMetadata? Metadata { get; set; }
+
+        [TomlProperty("dist")]
+        public DistributionMetadata? Distribution { get; set; }
     }
 
     public class PackageMetadata
@@ -100,5 +103,17 @@ public class ThunderstoreLock : BaseToml<ThunderstoreLock>
 
         [TomlProperty("dependency-group-requirements")]
         public Dictionary<string, Requirement[]>? RequirementGroups { get; set; }
+    }
+
+    public class DistributionMetadata
+    {
+        [TomlProperty("url")]
+        public string? UrlString { get; set; }
+
+        [TomlProperty("etag")]
+        public string? ETag { get; set; }
+
+        [TomlProperty("size")]
+        public int? Size { get; set; }
     }
 }
