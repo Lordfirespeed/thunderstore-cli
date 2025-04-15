@@ -20,7 +20,8 @@ public class PackageVersion
         get => VersionNumber.ToString();
         init
         {
-            try {
+            try
+            {
                 VersionNumber = new Version(value);
             }
             catch (Exception ex) when (false
@@ -29,7 +30,8 @@ public class PackageVersion
                 || ex is ArgumentOutOfRangeException
                 || ex is FormatException
                 || ex is OverflowException
-            ) { }
+            )
+            { }
         }
     }
 
