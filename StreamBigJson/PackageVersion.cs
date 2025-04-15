@@ -12,6 +12,7 @@ public class PackageVersion
     [JsonRequired]
     public required Guid PackageVersionUuid { get; init; }
 
+    #region version number handling
     [JsonPropertyName("version_number")]
     [JsonRequired]
     [MaxLength(32)]
@@ -38,6 +39,61 @@ public class PackageVersion
     [JsonIgnore]
     [NotMapped]
     public Version VersionNumber { get; init; } = null!;
+    #endregion
+
+    [JsonPropertyName("description")]
+    [JsonRequired]
+    [MaxLength(1024)]
+    public required string Description { get; init; }
+
+    [JsonPropertyName("icon")]
+    [JsonRequired]
+    [MaxLength(512)]
+    public required Uri IconUrl { get; init; }
+
+    [JsonPropertyName("download_url")]
+    [JsonRequired]
+    [MaxLength(512)]
+    public required Uri DownloadUrl { get; init; }
+
+    [JsonPropertyName("website_url")]
+    [MaxLength(512)]
+    public Uri? WebsiteUrl { get; init; }
+
+    [JsonPropertyName("downloads")]
+    [JsonRequired]
+    public required long DownloadCount { get; init; }
+
+    [JsonPropertyName("date_created")]
+    [JsonRequired]
+    public required DateTime CreatedAt { get; init; }
+
+    [JsonPropertyName("is_active")]
+    [JsonRequired]
+    public required bool IsActive { get; init; }
+
+    [JsonPropertyName("file_size")]
+    [JsonRequired]
+    public required long FileSize { get; init; }
+
+    #region dependencies handling
+    [JsonPropertyName("dependencies")]
+    [JsonRequired]
+    [NotMapped]
+    public required List<string> DependencyMonikers
+    {
+        get => Dependencies.Select(dependency => dependency.Moniker).ToList();
+        init
+        {
+            Dependencies = value
+                .Select(moniker => new PackageDependency(PackageVersionUuid, moniker))
+                .ToList();
+        }
+    }
+
+    public List<PackageDependency> Dependencies { get; init; } = null!;
+
+    #endregion
 
     [JsonIgnore]
     public Guid? PackageUuid { get; set; }
